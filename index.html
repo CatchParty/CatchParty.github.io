@@ -64,7 +64,7 @@
     // Auth content
     let appPassword = ''
     const authElement = `
-        <div class="d-flex justify-content-center align-items-center ">
+        <div class="d-flex justify-content-center align-items-center flex-wrap">
             <img src="./ilustracja.png" alt="" style="max-height: 400px;">
             <div>
                 <label for="password-box" class="form-label" style="color: #fff">Podaj hasło dostępowe</label>
@@ -138,7 +138,7 @@
     }
 
     const setTotalTimer = ({ start, end }) => {
-        const diff = start.time - end.time;
+        const diff = end.time - start.time;
 
         const minutes = Math.floor(diff / (1000 * 60));
         const seconds = Math.floor((diff / 1000) % 60);
