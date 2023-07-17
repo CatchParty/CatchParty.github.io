@@ -25,12 +25,16 @@
         else mainContentBox.innerHTML = defaultNotAllowed
     }
 
+    const addZeroToTime = (value, lessThan = 10) => {
+        return value < lessThan ? `0${value}` : value
+    }
+
     const getCurrentTime = () => {
         const date = new Date()
-        const hour = date.getHours()
-        const minutes = date.getMinutes()
-        const seconds = date.getSeconds()
-        const miliseconds = date.getMilliseconds()
+        const hour = addZeroToTime(date.getHours())
+        const minutes = addZeroToTime(date.getMinutes())
+        const seconds = addZeroToTime(date.getSeconds())
+        const miliseconds = addZeroToTime(date.getMilliseconds(), 100)
 
         return [date.getTime(), `${hour}:${minutes}:${seconds}`, miliseconds]
     }
@@ -161,8 +165,8 @@
             <div>
                 <h2 class="mb-0 mt-3" style="color: #eee">Wynik</h2>
                 <div style="font-weight: 200;color: #eee">
-                    <span style="font-size: 4rem;">${minutes}:${seconds}</span>
-                    <span style="font-size: 2rem;">${milliseconds}</span>
+                    <span style="font-size: 4rem;">${addZeroToTime(minutes)}:${addZeroToTime(seconds)}</span>
+                    <span style="font-size: 2rem;">${addZeroToTime(milliseconds, 100)}</span>
                 </div>
             </div>
 
