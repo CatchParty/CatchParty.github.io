@@ -8,15 +8,181 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body style="background-color: #8C82C5; height: 100vh; padding: 0; margin: 0;">
-    <div class="container d-flex justify-content-center align-items-center">
-        <div class="text-center">
-            <img src="./ilustracja.png" alt="" style="max-height: 400px;">
-            <div class="text-white" style="margin-top: -30px;">
-                <h2>Nic tu nie ma!</h2>
-                <h4>Proszę zachować spokój i się rozejść</h2>
+    <div id="main-content">
+        
+    </div>
+</body>
+<script type="module">
+    const mainContentBox = document.querySelector('#main-content')
+
+    const verifyPassword = () => {
+        const typedPasswordValue = document.querySelector('#password-box').value
+
+        if (typedPasswordValue === appPassword) setTimerElement()
+        else mainContentBox.innerHTML = defaultNotAllowed
+    }
+
+    const getCurrentTime = () => {
+        const date = new Date()
+        const hour = date.getHours()
+        const minutes = date.getMinutes()
+        const seconds = date.getSeconds()
+        const miliseconds = date.getMilliseconds()
+
+        return [date.getTime(), `${hour}:${minutes}:${seconds}`, miliseconds]
+    }
+
+    // Spinner content 
+    const spinnerElement = `
+        <div style="position:absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);">
+            <div class="spinner-border" style="color: #ceabce !important; width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+        </div>
+    `
+
+    // Default content for not allowed users
+    const defaultNotAllowed = `
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="text-center">
+                <img src="./ilustracja.png" alt="" style="max-height: 400px;">
+                <div class="text-white" style="margin-top: -30px;">
+                    <h2>Nic tu nie ma!</h2>
+                    <h4>Proszę zachować spokój i się rozejść</h2>
+                </div>
             </div>
         </div>
-    </div>
+    `
+
+    // Auth content
+    let appPassword = ''
+    const authElement = `
+        <div class="d-flex justify-content-center align-items-center ">
+            <img src="./ilustracja.png" alt="" style="max-height: 400px;">
+            <div>
+                <label for="password-box" class="form-label" style="color: #fff">Podaj hasło dostępowe</label>
+                <input type="password" class="form-control" id="password-box" placeholder="*******">
+                <button class="btn btn-primary mt-1" id="verifyPassword" style="background-color: #ceabce; border-color: #dda9dd">Zatwierdź</button>
+            </div>
+        </div>
+    `
+
+    const timerElement = `
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 50vh; border-bottom: 2px solid #fff;">
+                <div class="d-flex">
+                    <h2 class="text-white me-3">Start</h2>
+                    <button class="btn btn-primary" id="start-btn" style="background-color: #ceabce; border-color: #ceabce;">Ustaw pomiar</button>
+                </div>
+                <div class="text-white mt-4" id="start-timer">
+                    <span style="font-size: 4rem;">00:00:00</span>
+                    <span style="font-size: 2rem;">000</span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 50vh;">
+                <div class="d-flex">
+                    <h2 class="text-white me-3">Meta</h2>
+                    <button class="btn btn-primary" id="end-btn" style="background-color: #ceabce; border-color: #ceabce;">Ustaw pomiar</button>
+                </div>
+                <div class="text-white mt-4" id="end-timer">
+                    <span style="font-size: 4rem;">00:00:00</span>
+                    <span style="font-size: 2rem;">000</span>
+                </div>
+            </div>
+        </div>
+    `
+    const setTimerElement = () => {
+        mainContentBox.innerHTML = timerElement
+
+        const startBtn = document.querySelector('#start-btn')
+        const startTimerBox = document.querySelector('#start-timer')
+        const [startTimerSecondsBox, startTimerMilisecondsBox] = document.querySelectorAll('#start-timer span')
+
+        startBtn.addEventListener('click', () => {
+            const [t, dt1, dt2] = getCurrentTime()
+            let time = t
+            startTimerSecondsBox.innerHTML = dt1 
+            startTimerMilisecondsBox.innerHTML = dt2
+
+            setTimerDate('start', time, startTimerBox.innerHTML)
+
+            startBtn.remove()
+        })
+
+        const endBtn = document.querySelector('#end-btn')
+        const endTimerBox = document.querySelector('#end-timer')
+        const [endTimerSecondsBox, endTimerMilisecondsBox] = document.querySelectorAll('#end-timer span')
+
+        endBtn.addEventListener('click', () => {
+            const [t, dt1, dt2] = getCurrentTime()
+            let time = t
+            endTimerSecondsBox.innerHTML = dt1 
+            endTimerMilisecondsBox.innerHTML = dt2
+
+            setTimerDate('end', time, endTimerBox.innerHTML)
+
+            endBtn.remove()
+        })
+    }
+
+
+    mainContentBox.innerHTML = spinnerElement
+
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAhtpibcjt7TU78Cn7u5n0Ntc-Q73oZ1Es",
+      authDomain: "catchparty-5a244.firebaseapp.com",
+      databaseURL: "https://catchparty-5a244-default-rtdb.firebaseio.com",
+      projectId: "catchparty-5a244",
+      storageBucket: "catchparty-5a244.appspot.com",
+      messagingSenderId: "801066160733",
+      appId: "1:801066160733:web:17fb958d0374a871aa73b4"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const starCountRef = ref(db, 'config/');
+    onValue(starCountRef, (snapshot) => {
+        const { pass } = snapshot.val()
+        if (pass) {
+            appPassword = pass
+            mainContentBox.innerHTML = authElement
+
+            document.querySelector('#verifyPassword').addEventListener('click', verifyPassword)
+        }
+        else mainContentBox.innerHTML = defaultNotAllowed
+    });
+
+    const timerRef = ref(db, 'timer/');
+    onValue(timerRef, (snapshot) => {
+        const startTimerBox = document.querySelector('#start-timer')
+        const endTimerBox = document.querySelector('#end-timer')
+
+        if (!snapshot.val()) return
+
+        const { start, end } = snapshot.val()
+        if (start && end) {
+            console.log('done');
+            return
+        }
+
+        if (start) startTimerBox.innerHTML = start.displayTime
+        if (end) endTimerBox.innerHTML = end.displayTime
+    });
     
-</body>
+    const setTimerDate = (place, time, displayTime) => {
+        set(ref(db, 'timer/' + place), {
+            time,
+            displayTime
+        });
+    }
+  </script>
 </html>
