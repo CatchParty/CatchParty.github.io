@@ -204,9 +204,11 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    console.log('init: ', db, app)
 
     const starCountRef = ref(db, 'config/');
     onValue(starCountRef, (snapshot) => {
+        console.log('val: ', snapshot)
         const { pass } = snapshot.val()
         if (pass) {
             appPassword = pass
