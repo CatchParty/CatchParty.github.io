@@ -182,7 +182,7 @@
     }
 
 
-    //mainContentBox.innerHTML = spinnerElement
+    mainContentBox.innerHTML = spinnerElement
 
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
@@ -204,7 +204,6 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    console.log('init: ', db, app)
 
     const starCountRef = ref(db, 'config/');
     onValue(starCountRef, (snapshot) => {
