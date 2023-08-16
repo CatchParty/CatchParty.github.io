@@ -217,6 +217,8 @@
         else mainContentBox.innerHTML = defaultNotAllowed
     });
 
+    
+
     const timerRef = ref(db, 'timer/');
     onValue(timerRef, (snapshot) => {
         const startTimerBox = document.querySelector('#start-timer')
